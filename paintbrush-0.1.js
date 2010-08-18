@@ -153,14 +153,6 @@ function addFilter(filterType) {
 	// throw the data-* attributes into a JSON object
 	function getFilterParameters(ref) {
 
-		// check if an attribute is set, and add its value onto the filter parameters object
-		function createParameter(data, filterName, params) {
-			if (data) {
-				params[filterName] = data;
-			}
-			return params;
-		}
-
 		// create the params object and set some default parameters up front
 		var params = {
 			"blurAmount"		:	1,		// 0 and higher
@@ -173,15 +165,21 @@ function addFilter(filterType) {
 		}
 		
 		// check for every attribute, throw it into the params object if it exists.
-		params = createParameter(ref.getAttribute("data-pb-blur-amount"), "blurAmount", params);
-		params = createParameter(ref.getAttribute("data-pb-greyscale-amount"), "greyscaleAmount", params);
-		params = createParameter(ref.getAttribute("data-pb-noise-amount"), "noiseAmount", params);
-		params = createParameter(ref.getAttribute("data-pb-noise-type"), "noiseType", params);
-		params = createParameter(ref.getAttribute("data-pb-sepia-amount"), "sepiaAmount", params);
-		params = createParameter(ref.getAttribute("data-pb-tint-amount"), "tintAmount", params);
-		params = createParameter(ref.getAttribute("data-pb-tint-color"), "tintColor", params);
-			// O Canada, I got your back. (And UK, AU, NZ, IE, etc.)
-			params = createParameter(ref.getAttribute("data-pb-tint-colour"), "tintColor", params);
+		for (var filterName in params){
+		  
+		  // "blurAmount" ==> "data-pb-blur-amount"
+		  var hypenated = filterName.replace(/([A-Z])/g, function(all, letter) {  
+		        return '-' + letter.toLowerCase(); 
+		      }),
+		      attr      = ref.getAttribute("data-pb-" + hypenated);
+		      
+		  if (attr){
+		    params[filterName] = attr;
+		  }
+		}
+	
+		// O Canada, I got your back. (And UK, AU, NZ, IE, etc.)
+		params['tintColor'] = ref.getAttribute("data-pb-tint-colour") || params['tintColor'];
 
 		return(params);
 	}
