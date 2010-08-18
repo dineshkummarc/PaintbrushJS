@@ -181,7 +181,7 @@ function addFilter(filterType) {
 		params = createParameter(ref.getAttribute("data-pb-tint-amount"), "tintAmount", params);
 		params = createParameter(ref.getAttribute("data-pb-tint-color"), "tintColor", params);
 			// O Canada, I got your back. (And UK, AU, NZ, IE, etc.)
-			params = createParameter(ref.getAttribute("data-pb-tint-colour"), "tintColour", params);
+			params = createParameter(ref.getAttribute("data-pb-tint-colour"), "tintColor", params);
 
 		return(params);
 	}
