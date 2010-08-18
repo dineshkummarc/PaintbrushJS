@@ -221,42 +221,44 @@ function addFilter(filterType) {
 	// the function that actually manipulates the pixels
 	function applyFilters(filterType, params, pixels, index, thisPixel, dest) {
 
-		// figure out which filter to apply, and do it	
-		switch(filterType) {
+    var data = pixels.data;
 
-			case "filter-greyscale":
-				var val = (thisPixel.r * 0.21) + (thisPixel.g * 0.71) + (thisPixel.b * 0.07);
-				pixels.data[index] = findColorDifference(params.greyscaleAmount, val, thisPixel.r);
-				pixels.data[index + 1] = findColorDifference(params.greyscaleAmount, val, thisPixel.g);
-				pixels.data[index + 2] = findColorDifference(params.greyscaleAmount, val, thisPixel.b);
-				break;
+    // figure out which filter to apply, and do it	
+    switch(filterType) {
 
-			case "filter-noise":
-				var val = noise(params.noiseAmount);
-				if ((params.noiseType == "mono") || (params.noiseType == "monochrome")) {
-					pixels.data[index] = thisPixel.r + val;
-					pixels.data[index + 1] = thisPixel.g + val;
-					pixels.data[index + 2] = thisPixel.b + val;
-				} else {
-					pixels.data[index] = thisPixel.r + noise(params.noiseAmount);
-					pixels.data[index + 1] = thisPixel.g + noise(params.noiseAmount);
-					pixels.data[index + 2] = thisPixel.b + noise(params.noiseAmount);
-				}
-				break;
-				
-			case "filter-tint":
-				pixels.data[index] = findColorDifference(params.tintAmount, dest.r, thisPixel.r);
-				pixels.data[index + 1] = findColorDifference(params.tintAmount, dest.g, thisPixel.g);
-				pixels.data[index + 2] = findColorDifference(params.tintAmount, dest.b, thisPixel.b);
-				break;
-				
-			case "filter-sepia":
-				pixels.data[index] = findColorDifference(params.sepiaAmount, (thisPixel.r * 0.393) + (thisPixel.g * 0.769) + (thisPixel.b * 0.189), thisPixel.r);
-				pixels.data[index + 1] = findColorDifference(params.sepiaAmount, (thisPixel.r * 0.349) + (thisPixel.g * 0.686) + (thisPixel.b * 0.168), thisPixel.g);
-				pixels.data[index + 2] = findColorDifference(params.sepiaAmount, (thisPixel.r * 0.272) + (thisPixel.g * 0.534) + (thisPixel.b * 0.131), thisPixel.b);
-				break;
-		}
-		return(pixels);
+    	case "filter-greyscale":
+    		var val = (thisPixel.r * 0.21) + (thisPixel.g * 0.71) + (thisPixel.b * 0.07);
+    		data[index] = findColorDifference(params.greyscaleAmount, val, thisPixel.r);
+    		data[index + 1] = findColorDifference(params.greyscaleAmount, val, thisPixel.g);
+    		data[index + 2] = findColorDifference(params.greyscaleAmount, val, thisPixel.b);
+    		break;
+
+    	case "filter-noise":
+    		var val = noise(params.noiseAmount);
+    		if ((params.noiseType == "mono") || (params.noiseType == "monochrome")) {
+    			data[index] = thisPixel.r + val;
+    			data[index + 1] = thisPixel.g + val;
+    			data[index + 2] = thisPixel.b + val;
+    		} else {
+    			data[index] = thisPixel.r + noise(params.noiseAmount);
+    			data[index + 1] = thisPixel.g + noise(params.noiseAmount);
+    			data[index + 2] = thisPixel.b + noise(params.noiseAmount);
+    		}
+    		break;
+
+    	case "filter-tint":
+    		data[index] = findColorDifference(params.tintAmount, dest.r, thisPixel.r);
+    		data[index + 1] = findColorDifference(params.tintAmount, dest.g, thisPixel.g);
+    		data[index + 2] = findColorDifference(params.tintAmount, dest.b, thisPixel.b);
+    		break;
+
+    	case "filter-sepia":
+    		data[index] = findColorDifference(params.sepiaAmount, (thisPixel.r * 0.393) + (thisPixel.g * 0.769) + (thisPixel.b * 0.189), thisPixel.r);
+    		data[index + 1] = findColorDifference(params.sepiaAmount, (thisPixel.r * 0.349) + (thisPixel.g * 0.686) + (thisPixel.b * 0.168), thisPixel.g);
+    		data[index + 2] = findColorDifference(params.sepiaAmount, (thisPixel.r * 0.272) + (thisPixel.g * 0.534) + (thisPixel.b * 0.131), thisPixel.b);
+    		break;
+    }
+    return(pixels);
 	}
 
 
